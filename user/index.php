@@ -151,9 +151,9 @@ $result = mysqli_query($koneksi, $query);
         <li class="nav-item">
             <a class="nav-link" aria-current="page" href="index.php">Beranda</a>
         </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="tentang.html">Tentang Kami</a>
-        </li> -->
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="tentang.php">Tentang Kami</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" aria-current="page" href="transaksi.php">Transaksi</a>
         </li>
