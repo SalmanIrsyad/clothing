@@ -69,7 +69,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                     <button type="submit" class="btn btn-dark w-100 rounded-pill shadow-sm">Login</button>
                                 </form>   
-                                <p class="mt-3 text-center">Belum punya akun? <a href="registrasi.php">Registrasi di sini</a></p>
+                                <br>
+                                <p class="mt-3 text-center" style="color: black;">
+                                    Sudah punya akun? <a href="registrasi.php" class="text-dark">Registrasi di sini</a>
+                                </p>
+                                <br>
+                                <hr>
+                                <div class="text-center">
+                                    <img src="img/logo2.png" width="150px" class="d-block mx-auto" alt="">
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
