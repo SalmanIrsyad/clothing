@@ -1,9 +1,59 @@
 <?php
 session_start();
-include '../koneksi/koneksi.php'; // Pastikan koneksi database tersedia
+include '../koneksi/koneksi.php';
 
-// Ambil data keranjang dari sesi
-$cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+// Pastikan pengguna sudah login
+if (!isset($_SESSION['id_user'])) {
+    echo "Silakan login terlebih dahulu.";
+    exit;
+}
+
+$id_user = $_SESSION['id_user'];
+
+// Ambil produk yang ada di keranjang sementara (bisa dari session atau database)
+$query = "SELECT p.id_produk, p.nama_produk, p.harga, c.jumlah 
+          FROM cart c 
+          JOIN produk p ON c.id_produk = p.id_produk 
+          WHERE c.id_user = $id_user";
+$result = mysqli_query($koneksi, $query);
+
+$total_harga = 0;
+$produk_list = [];
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $total_harga += $row['harga'] * $row['jumlah'];
+    $produk_list[] = $row;
+}
+
+// Jika tombol checkout ditekan
+if (isset($_POST['checkout'])) {
+    $tanggal_pemesanan = date('Y-m-d H:i:s');
+    $status = 'menunggu';
+
+    // Simpan pesanan ke tabel pesanan
+    $query_pesanan = "INSERT INTO pesanan (id_user, total_harga, status, tanggal_pemesanan) 
+                      VALUES ('$id_user', '$total_harga', '$status', '$tanggal_pemesanan')";
+    mysqli_query($koneksi, $query_pesanan);
+    $id_pesanan = mysqli_insert_id($koneksi);
+
+    // Simpan detail pesanan
+    foreach ($produk_list as $produk) {
+        $id_produk = $produk['id_produk'];
+        $jumlah = $produk['jumlah'];
+        $harga = $produk['harga'];
+
+        $query_detail = "INSERT INTO detail_pesanan (id_pesanan, id_produk, jumlah, harga) 
+                         VALUES ('$id_pesanan', '$id_produk', '$jumlah', '$harga')";
+        mysqli_query($koneksi, $query_detail);
+    }
+
+    // Hapus produk dari cart setelah checkout
+    mysqli_query($koneksi, "DELETE FROM cart WHERE id_user = $id_user");
+
+    echo "Pesanan berhasil dibuat!";
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -120,43 +170,27 @@ $cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
         <table class="table">
             <thead>
                 <tr>
-                    <th>Gambar</th>
-                    <th>Nama Produk</th>
+                    <th>Produk</th>
                     <th>Harga</th>
                     <th>Jumlah</th>
-                    <th>Ukuran</th>
-                    <th>Total</th>
+                    <th>Subtotal</th>
                 </tr>
             </thead>
             <tbody>
-                <?php $total = 0; ?>
-                <?php foreach ($cart as $id_produk => $produk) : ?>
-                    <tr>
-                        <td><img src="<?php echo $produk['gambar']; ?>" width="100"></td>
-                        <td><?php echo $produk['nama']; ?></td>
-                        <td>Rp<?php echo number_format($produk['harga']); ?></td>
-                        <td><?php echo $produk['jumlah']; ?></td>
-                        <td><?php echo $produk['ukuran']; ?></td>
-                        <td>Rp<?php echo number_format($produk['harga'] * $produk['jumlah']); ?></td>
-                    </tr>
-                    <?php $total += $produk['harga'] * $produk['jumlah']; ?>
-                <?php endforeach; ?>
+                <?php foreach ($produk_list as $produk) : ?>
+                <tr>
+                    <td><?= htmlspecialchars($produk['nama_produk']); ?></td>
+                    <td><?= number_format($produk['harga'], 0, ',', '.'); ?></td>
+                    <td><?= $produk['jumlah']; ?></td>
+                    <td><?= number_format($produk['harga'] * $produk['jumlah'], 0, ',', '.'); ?></td>
+                </tr>
+            <?php endforeach; ?>
             </tbody>
         </table>
-        <div class="d-flex justify-content-end">
-            <h3>Total Belanja: Rp<?php echo number_format($total); ?></h3>
-        </div>
-        <form action="proses_checkout.php" method="post">
-            <div class="mb-3">
-                <label for="shippingMethod">Metode Pengiriman</label>
-                <select class="form-select" name="shippingMethod">
-                    <option value="5000">Standar - Rp.5000</option>
-                    <option value="8000">Expres - Rp.8000</option>
-                    <option value="10000">Next-Day - Rp.10.000</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-success">Bayar</button>
-        </form>
+        <p>Total Harga: Rp <?= number_format($total_harga, 0, ',', '.'); ?></p>
+            <form method="POST">
+                <button class="btn btn-outline-dark flex-shrink-0" type="submit" name="checkout" id="checkout" >Checkout</button>
+            </form>
     </div>
 
     <!-- Footer -->

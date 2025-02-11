@@ -149,13 +149,16 @@ $result = mysqli_query($koneksi, $query);
     <!-- Navbar -->
     <ul class="nav nav-underline d-flex justify-content-center">
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="index.html">Beranda</a>
+            <a class="nav-link" aria-current="page" href="index.php">Beranda</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link" aria-current="page" href="tentang.html">Tentang Kami</a>
+        </li> -->
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="transaksi.php">Transaksi</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="transaksi.html">Transaksi</a>
+            <a class="nav-link" aria-current="page" href="../logout.php">Logout</a>
         </li>
     </ul>
     <!-- Layout -->

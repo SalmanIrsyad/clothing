@@ -129,13 +129,13 @@ if (isset($_GET['id_produk'])) {
     <!-- Navbar -->
     <ul class="nav nav-underline d-flex justify-content-center">
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="index.html">Beranda</a>
+            <a class="nav-link" aria-current="page" href="index.php">Beranda</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link" aria-current="page" href="tentang.html">Tentang Kami</a>
-        </li>
+        </li> -->
         <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="transaksi.html">Transaksi</a>
+            <a class="nav-link" aria-current="page" href="transaksi.php">Transaksi</a>
         </li>
     </ul>
     <!-- Layout -->
@@ -218,32 +218,6 @@ if (isset($_GET['id_produk'])) {
                 </div>
             </div>
         </footer>
-
-        <script>
-            function addToCart() {
-                const productName = document.getElementById('productName').value;
-                const productPrice = document.getElementById('productPrice').value;
-                const productImage = document.getElementById('productImage').value;
-                const productMaterial = document.getElementById('productMaterial').value;
-                const quantity = document.getElementById('inputQuantity').value;
-                const size = document.querySelector('input[name="size"]:checked').value;
-        
-                const product = {
-                    name: productName,
-                    price: productPrice,
-                    image: productImage,
-                    material: productMaterial,
-                    quantity: quantity,
-                    size: size
-                };
-        
-                let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                cart.push(product);
-                localStorage.setItem('cart', JSON.stringify(cart));
-        
-                window.location.href = 'transaksi.html';
-            }
-        </script>
         
 </body>
 </html>

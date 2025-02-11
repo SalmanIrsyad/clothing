@@ -30,6 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .bg-color { background: white; }
     </style>
 </head>
-<body>
+<body bgcolor="black">
     <div class="container">
         <div class="row g-0">
             <div class="col-md-6 d-none d-md-flex bg-image"></div>
@@ -54,21 +57,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="col-lg-10 col-xl-7 mx-auto">
                                 <p style="font-size: 75px;"><b>Login</b></p>
                                 <p class="text-muted mb-4">Akses lebih cepat, belanja lebih nyaman!</p>
-                                <?php if (isset($error)) : ?>
-                                    <div class="alert alert-danger"><?= $error ?></div>
-                                <?php endif; ?>
-                             <form method="POST" action="../clothing/user/index.php">
-                            <div class="mb-3">
-                                <label>Email</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Password</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                           </form>
-
+                                <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+                                <form method="POST" >
+                                    <div class="mb-3">
+                                        <label>Email</label>
+                                        <input type="email" name="email" class="form-control" required class="form-control rounded-pill shadow-sm px-4">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Password</label>
+                                        <input type="password" name="password" class="form-control" required class="form-control rounded-pill shadow-sm px-4">
+                                    </div>
+                                    <button type="submit" class="btn btn-dark w-100 rounded-pill shadow-sm">Login</button>
+                                </form>   
+                                <p class="mt-3 text-center">Belum punya akun? <a href="registrasi.php">Registrasi di sini</a></p>
                             </div>
                         </div>
                     </div>
